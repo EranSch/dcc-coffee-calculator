@@ -227,12 +227,11 @@ jQuery(function($){
 		return false;
 	});
 
-		function gallonReducer(amount, size){
-			if(amount <= size){
-				return 1;
-			}else{
-				return 1 + gallonReducer(amount - size);
-			}
+	function gallonReducer(amount, size){
+		if(amount <= size){
+			return 1;
+		}else{
+			return 1 + gallonReducer(amount - size);
 		}
-
+	}
 });
