@@ -156,12 +156,12 @@ jQuery(function($){
 
 				if(order[beverage].oz <= 88){
 					order[beverage].containers.pp = 1;
-					order[beverage].overage = 88 - order[beverage].oz;
+					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
 				}else if (order[beverage].oz <= 320){
 					order[beverage].containers.gal320 = 1;
-					order[beverage].overage = 320 - order[beverage].oz;
+					order[beverage].overage = 320 * order[beverage].containers.gal320 - order[beverage].oz;
 				}else{
-					order[beverage].containers.gal640 = gallonReducer(order[beverage].oz);
+					order[beverage].containers.gal640 = gallonReducer(order[beverage].oz, 640);
 					order[beverage].overage = 640 * order[beverage].containers.gal640 - order[beverage].oz;
 				}
 
@@ -227,11 +227,11 @@ jQuery(function($){
 		return false;
 	});
 
-		function gallonReducer(amount){
-			if(amount <= 640){
+		function gallonReducer(amount, size){
+			if(amount <= size){
 				return 1;
 			}else{
-				return 1 + gallonReducer(amount - 640);
+				return 1 + gallonReducer(amount - size);
 			}
 		}
 
