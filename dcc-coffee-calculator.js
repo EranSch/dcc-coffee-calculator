@@ -91,21 +91,25 @@ jQuery(function($){
 			quantity: 1,
 			'product_id': productId,
 			regularCoffee: {
+				pretty: 'Regular Coffee',
 				pp:     'addon-' + productId + '-regular-coffee[2-1-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
 			},
 			decafCoffee: {
+				pretty: 'Decaf Coffee',
 				pp:     'addon-' + productId + '-decaf-coffee[2-1-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
 			},
 			hotTea: {
+				pretty: 'Hot Tea',
 				pp:     'addon-' + productId + '-hot-tea[2-1-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
 			},
 			icedTea: {
+				pretty: 'Iced Tea',
 				pp:     'addon-' + productId + '-iced-tea[2-1-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
@@ -195,7 +199,7 @@ jQuery(function($){
 			 */
 			var output = '';
 			for(var beverage in order){
-				output += '<strong>' + beverage + '</strong>';
+				output += '<strong>' + formFields[beverage].pretty + '</strong>';
 				output += '<dl>';
 				output += '<dt>Ounces Computed</dt>';
 				output += '<dd>' + order[beverage].oz + '</dd>';
