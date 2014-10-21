@@ -44,16 +44,9 @@
 	margin-top: -15px;
 }
 
-
-.beverage-calculator .button.button-plain {
-	background-color: grey;
-	border-color: rgb(126, 126, 126);
-	width: 24%;
-}
-
 .beverage-calculator .button {
 	padding-bottom: 10px;
-	width: 75%;
+	width: 100%;
 }
 
 .debug-output {
