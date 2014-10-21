@@ -1,0 +1,68 @@
+<div class="beverage-calculator">
+	<form>
+		<label class="guests">
+			Number of Guests
+			<input 
+				name="guests" 
+				type="number" 
+				required
+				min="1" max="500"
+			>
+		</label>
+		<label class="ratio">Men to Women Ratio
+			<div class="range-label">
+				<span style="float:left">All Men</span>
+				<span>Mixed</span>
+				<span style="float:right">All Women</span>
+			</div>
+			<input 
+				class="ratio-slider"
+				name='genderRatio'
+				type="text" 
+				data-slider="true"
+				data-slider-range="0,100"
+				data-slider-values="0,50,100"
+				data-slider-snap="true"
+				value="50"
+			>
+		</label>
+		<label class="time-of-day">
+			Time of Day
+			<select name="time" required>
+				<option value="">Select One</option>
+				<option value="morn">Morning</option>
+				<option value="eve">Afternoon/Evening</option>
+			</select>
+		</label>
+		<div class="beverages">
+			Beverage(s)
+			<ul>
+				<li><label>Regular Coffee<input name="regularCoffee" type="checkbox"></label></li>
+				<li><label>Decaf Coffee<input name="decafCoffee" type="checkbox"></label></li>
+				<li><label>Hot Tea<input name="hotTea" type="checkbox"></label></li>
+				<li class="iced-tea"><label>Iced Tea<input name="icedTea" type="checkbox"></label></li>
+			</ul>
+		</div>
+		<label class="cup-size">
+			Cup Size
+			<select name="cupSize" required>
+				<option value="">Select One</option>
+				<option value="6">6oz</option>
+				<option value="12">12oz</option>
+			</select>
+		</label>
+		<label class="water">
+			Hot Water (Gallons)<br>(any amount for $6.99)
+			<input 
+				name="water" 
+				type="number" 
+				min="1" max="500">
+		</label>
+		<label>
+			Order Notes
+			<textarea class="order-notes" name="notes"></textarea>
+		</label>
+		<button type="submit" class="js-calculate button">Calculate</button>
+		<button type="reset" class="button button-plain">Reset</button>
+	</form>
+</div> 
