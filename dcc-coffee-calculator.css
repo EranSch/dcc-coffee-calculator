@@ -50,6 +50,7 @@
 }
 
 .debug-output {
+	display: none;
 	float: right;
 	width: 420px;
 }

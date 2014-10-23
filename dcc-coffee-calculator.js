@@ -21,102 +21,113 @@
 jQuery(function($){
 
 	/*
-	 * Handle form submit (a.k.a. "The Magic")
+	 * This object stores the various percentages the group is predicted to 
+	 * consume given the time of day and gender balance.
 	 */
-	$('.beverage-calculator form').submit(function(event){
-
-		event.preventDefault();
-		var $form = $(this);
-
-		/*
-		 * This object stores the various percentages the group is predicted to 
-		 * consume given the time of day and gender balance.
-		 */
-		var consumptionRatios = {
-			regularCoffee: {
-				morn: {
-					0: 0.6, // All men
-					50: 0.5, // Mixed
-					100: 0.5, // All women
-				},
-				eve: {
-					0: 0.35, // All men
-					50: 0.35, // Mixed
-					100: 0.3, // All women
-				}
+	var consumptionRatios = {
+		regularCoffee: {
+			morn: {
+				0: 0.6, // All men
+				50: 0.5, // Mixed
+				100: 0.5, // All women
 			},
-			decafCoffee: {
-				morn: {
-					0: 0.2, // All men
-					50: 0.25, // Mixed
-					100: 0.25, // All women
-				},
-				eve: {
-					0: 0.25, // All men
-					50: 0.2, // Mixed
-					100: 0.2, // All women
-				}
+			eve: {
+				0: 0.35, // All men
+				50: 0.35, // Mixed
+				100: 0.3, // All women
+			}
+		},
+		decafCoffee: {
+			morn: {
+				0: 0.2, // All men
+				50: 0.25, // Mixed
+				100: 0.25, // All women
 			},
-			hotTea: {
-				morn: {
-					0: 0.1, // All men
-					50: 0.1, // Mixed
-					100: 0.15, // All women
-				},
-				eve: {
-					0: 0.1, // All men
-					50: 0.1, // Mixed
-					100: 0.15, // All women
-				}
+			eve: {
+				0: 0.25, // All men
+				50: 0.2, // Mixed
+				100: 0.2, // All women
+			}
+		},
+		hotTea: {
+			morn: {
+				0: 0.1, // All men
+				50: 0.1, // Mixed
+				100: 0.15, // All women
 			},
-			icedTea: {
-				morn: {
-					0: 0.2, // All men
-					50: 0.2, // Mixed
-					100: 0.25, // All women
-				},
-				eve: {
-					0: 0.2, // All men
-					50: 0.2, // Mixed
-					100: 0.25, // All women
-				}
+			eve: {
+				0: 0.1, // All men
+				50: 0.1, // Mixed
+				100: 0.15, // All women
+			}
+		},
+		icedTea: {
+			morn: {
+				0: 0.2, // All men
+				50: 0.2, // Mixed
+				100: 0.25, // All women
+			},
+			eve: {
+				0: 0.2, // All men
+				50: 0.2, // Mixed
+				100: 0.25, // All women
 			}
 		}
+	}
 
-		/*
-		 * This object maps the form fields that will be used to submit order
-		 * data to WooCommerce
-		 */
-		var formFields = {
-			quantity: 1,
-			'product_id': productId,
-			regularCoffee: {
-				pretty: 'Regular Coffee',
-				pp:     'addon-' + productId + '-regular-coffee[2-1-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
-			},
-			decafCoffee: {
-				pretty: 'Decaf Coffee',
-				pp:     'addon-' + productId + '-decaf-coffee[2-1-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
-			},
-			hotTea: {
-				pretty: 'Hot Tea',
-				pp:     'addon-' + productId + '-hot-tea[2-1-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
-			},
-			icedTea: {
-				pretty: 'Iced Tea',
-				pp:     'addon-' + productId + '-iced-tea[2-1-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
-			},
-			hotWater: 'addon-' + productId + '-hot-water[gallons]',
-			notes:    'addon-' + productId + '-details[order-notes]'
-		};
+	/*
+	 * This object maps the form fields that will be used to submit order
+	 * data to WooCommerce
+	 */
+	var formFields = {
+		quantity: 1,
+		'product_id': productId,
+		regularCoffee: {
+			pretty: 'Regular Coffee',
+			pp:     'addon-' + productId + '-regular-coffee[2-1-liter-pump-pot]',
+			gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
+			gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
+		},
+		decafCoffee: {
+			pretty: 'Decaf Coffee',
+			pp:     'addon-' + productId + '-decaf-coffee[2-1-liter-pump-pot]',
+			gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
+			gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
+		},
+		hotTea: {
+			pretty: 'Hot Tea',
+			pp:     'addon-' + productId + '-hot-tea[2-1-liter-pump-pot]',
+			gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
+			gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
+		},
+		icedTea: {
+			pretty: 'Iced Tea',
+			pp:     'addon-' + productId + '-iced-tea[2-1-liter-pump-pot]',
+			gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
+			gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
+		},
+		hotWater: 'addon-' + productId + '-hot-water[gallons]',
+		notes:    'addon-' + productId + '-details[order-notes]'
+	};
+
+	/*
+	 * Recalculate on change events
+	 */
+
+	$('.beverage-calculator form').on('change', function(event){
+		try{
+			calculateOrder.call(this);
+		}catch(e){
+			console.error(e);
+		}
+	}).on('submit', function(){
+		$('.debug-output').show();
+		return false;
+	});
+
+	// The magic
+	function calculateOrder(){
+		var $form = $(this);
 
 		/*
 		 * Extract the values from the table for easy access later.
@@ -235,9 +246,7 @@ jQuery(function($){
 			// 	$.param(orderObject)
 			// );
 		}
-
-		return false;
-	});
+	}
 
 	function gallonReducer(amount, size){
 		if(amount <= size){
