@@ -7,8 +7,6 @@
 * Author URI: http://eran.sh
 * Version: 1.0
 * License: GPL2
-* Text Domain: Text Domain
-* Domain Path: Domain Path
 */
 
 /*
@@ -27,21 +25,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-/**
- * Snippet Wordpress Plugin Boilerplate based on:
- *
- * - https://github.com/purplefish32/sublime-text-2-wordpress/blob/master/Snippets/Plugin_Head.sublime-snippet
- * - http://wordpress.stackexchange.com/questions/25910/uninstall-activate-deactivate-a-plugin-typical-features-how-to/25979#25979
- *
- * By default the option to uninstall the plugin is disabled,
- * to use uncomment or remove if not used.
- *
- * This Template does not have the necessary code for use in multisite. 
- *
- * Also delete this comment block is unnecessary once you have read.
- *
- * Version 1.0
- */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
