@@ -40,7 +40,7 @@
 				<li><label>Regular Coffee<input name="regularCoffee" type="checkbox"></label></li>
 				<li><label>Decaf Coffee<input name="decafCoffee" type="checkbox"></label></li>
 				<li><label>Hot Tea<input name="hotTea" type="checkbox"></label></li>
-				<li class="iced-tea"><label>Iced Tea<input name="icedTea" type="checkbox"></label></li>
+				<li><label>Iced Tea<input name="icedTea" type="checkbox"></label></li>
 			</ul>
 		</div>
 		<label class="cup-size">
@@ -51,6 +51,35 @@
 				<option value="12">12oz</option>
 			</select>
 		</label>
+		<div class="addons">
+			Addons (No Charge)
+			<ul>
+				<li>
+					<label>
+						Sugars
+						<input name="addons[]" value="sugars" type="checkbox">
+					</label>
+				</li>
+				<li>
+					<label>
+						Creamer
+						<input name="addons[]" value="creamer" type="checkbox">
+					</label>
+				</li>
+				<li>
+					<label>
+						Stir Sticks
+						<input name="addons[]" value="stir-sticks" type="checkbox">
+					</label>
+				</li>
+				<li>
+					<label>
+						Cups
+						<input name="addons[]" value="cups" type="checkbox">
+					</label>
+				</li>
+			</ul>
+		</div>
 		<label class="water">
 			Hot Water (Gallons)<br>(any amount for $6.99)
 			<input 

@@ -11,25 +11,26 @@
 .beverage-calculator select{
 	float: right;
 }
-.beverages{
+.beverages,
+.addons{
 	overflow: hidden;
 	width: 100%;
 }
-.beverages ul{
+.beverages ul,
+.addons ul{
 	padding-left: 0;
 	margin: 0;
 	width: 8em;
 	float: right;
 }
-.beverages li{
+.beverages li,
+.addons li{
 	display:block;
 	margin: 0.1em 0;
 }
-.beverages li label{
+.beverages li label,
+.addons li label{
 	display:inline;
-}
-.beverages .iced-tea{
-	list-style-type: none;
 }
 .order-notes {
 	width: 100%;

@@ -127,9 +127,15 @@
 		/*
 		 * Extract the values from the table for easy access later.
 		 */
+		var addons = [];
 		$.each($form.serializeArray(), function(i, field) {
-			self.values[field.name] = field.value;
+			if(field.name == 'addons[]'){
+				addons.push(field.value);
+			}else{
+				self.values[field.name] = field.value;
+			}
 		});
+		self.values.addons = addons.join(', ');
 
 		/*
 		 * For each beverage selected in the form, calculate the number of 
@@ -195,7 +201,13 @@
 			}
 		}
 		orderObject[self.formFields['hotWater']] = self.values.water;
-		orderObject[self.formFields['notes']] = self.values.notes;
+
+		if(self.values.addons.length > 0){
+			var str = 'Addons Requested: ' + self.values.addons;
+			orderObject[self.formFields['notes']] = str + '\n\n';
+		}
+
+		orderObject[self.formFields['notes']] += self.values.notes;
 
 		return orderObject;
 	}
