@@ -157,6 +157,12 @@ jQuery(function($){
 				if(order[beverage].oz <= 88){
 					order[beverage].containers.pp = 1;
 					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
+				}else if(order[beverage].oz <= 176){
+					order[beverage].containers.pp = 2;
+					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
+				}else if(order[beverage].oz <= 264){
+					order[beverage].containers.pp = 2;
+					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
 				}else if (order[beverage].oz <= 320){
 					order[beverage].containers.gal320 = 1;
 					order[beverage].overage = 320 * order[beverage].containers.gal320 - order[beverage].oz;
