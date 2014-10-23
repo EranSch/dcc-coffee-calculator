@@ -68,9 +68,9 @@ class DCC_CoffeeCalculator {
 
 		if(isset($_GET['debug']) && filter_input(INPUT_GET, 'debug') == 1){
 			echo "<script>window.bevCalcDebug = true;</script>";
-			echo "<div class='debug-output'><pre>Debug output will appear here.\nComplete the form to the right and click\nthe calculate button to view the order.</pre></div>";
 		}
 		echo file_get_contents(plugins_url( 'templates/calculator.html', __FILE__ ));
+		echo file_get_contents(plugins_url( 'templates/right-half.html', __FILE__ ));
 		return ob_get_clean();
 	}
 

@@ -18,135 +18,128 @@
  * the user. 
  */
 
-jQuery(function($){
+(function($){
 
-	/*
-	 * This object stores the various percentages the group is predicted to 
-	 * consume given the time of day and gender balance.
-	 */
-	var consumptionRatios = {
-		regularCoffee: {
-			morn: {
-				0: 0.6, // All men
-				50: 0.5, // Mixed
-				100: 0.5, // All women
+	function CoffeeCalculator(){
+
+		this.values = {};
+		this.order = {};
+
+		/*
+		 * This object stores the various percentages the group is predicted to 
+		 * consume given the time of day and gender balance.
+		 */
+		this.consumptionRatios = {
+			regularCoffee: {
+				morn: {
+					0: 0.6, // All men
+					50: 0.5, // Mixed
+					100: 0.5, // All women
+				},
+				eve: {
+					0: 0.35, // All men
+					50: 0.35, // Mixed
+					100: 0.3, // All women
+				}
 			},
-			eve: {
-				0: 0.35, // All men
-				50: 0.35, // Mixed
-				100: 0.3, // All women
-			}
-		},
-		decafCoffee: {
-			morn: {
-				0: 0.2, // All men
-				50: 0.25, // Mixed
-				100: 0.25, // All women
+			decafCoffee: {
+				morn: {
+					0: 0.2, // All men
+					50: 0.25, // Mixed
+					100: 0.25, // All women
+				},
+				eve: {
+					0: 0.25, // All men
+					50: 0.2, // Mixed
+					100: 0.2, // All women
+				}
 			},
-			eve: {
-				0: 0.25, // All men
-				50: 0.2, // Mixed
-				100: 0.2, // All women
-			}
-		},
-		hotTea: {
-			morn: {
-				0: 0.1, // All men
-				50: 0.1, // Mixed
-				100: 0.15, // All women
+			hotTea: {
+				morn: {
+					0: 0.1, // All men
+					50: 0.1, // Mixed
+					100: 0.15, // All women
+				},
+				eve: {
+					0: 0.1, // All men
+					50: 0.1, // Mixed
+					100: 0.15, // All women
+				}
 			},
-			eve: {
-				0: 0.1, // All men
-				50: 0.1, // Mixed
-				100: 0.15, // All women
-			}
-		},
-		icedTea: {
-			morn: {
-				0: 0.2, // All men
-				50: 0.2, // Mixed
-				100: 0.25, // All women
-			},
-			eve: {
-				0: 0.2, // All men
-				50: 0.2, // Mixed
-				100: 0.25, // All women
+			icedTea: {
+				morn: {
+					0: 0.2, // All men
+					50: 0.2, // Mixed
+					100: 0.25, // All women
+				},
+				eve: {
+					0: 0.2, // All men
+					50: 0.2, // Mixed
+					100: 0.25, // All women
+				}
 			}
 		}
+
+		/*
+		 * This object maps the form fields that will be used to submit order
+		 * data to WooCommerce
+		 */
+		this.formFields = {
+			quantity: 1,
+			'product_id': productId,
+			regularCoffee: {
+				pretty: 'Regular Coffee',
+				pp:     'addon-' + productId + '-regular-coffee[2-1-liter-pump-pot]',
+				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
+				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
+			},
+			decafCoffee: {
+				pretty: 'Decaf Coffee',
+				pp:     'addon-' + productId + '-decaf-coffee[2-1-liter-pump-pot]',
+				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
+				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
+			},
+			hotTea: {
+				pretty: 'Hot Tea',
+				pp:     'addon-' + productId + '-hot-tea[2-1-liter-pump-pot]',
+				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
+				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
+			},
+			icedTea: {
+				pretty: 'Iced Tea',
+				pp:     'addon-' + productId + '-iced-tea[2-1-liter-pump-pot]',
+				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
+				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
+			},
+			hotWater: 'addon-' + productId + '-hot-water[gallons]',
+			notes:    'addon-' + productId + '-details[order-notes]'
+		};
+
 	}
 
-	/*
-	 * This object maps the form fields that will be used to submit order
-	 * data to WooCommerce
-	 */
-	var formFields = {
-		quantity: 1,
-		'product_id': productId,
-		regularCoffee: {
-			pretty: 'Regular Coffee',
-			pp:     'addon-' + productId + '-regular-coffee[2-1-liter-pump-pot]',
-			gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
-			gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
-		},
-		decafCoffee: {
-			pretty: 'Decaf Coffee',
-			pp:     'addon-' + productId + '-decaf-coffee[2-1-liter-pump-pot]',
-			gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
-			gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
-		},
-		hotTea: {
-			pretty: 'Hot Tea',
-			pp:     'addon-' + productId + '-hot-tea[2-1-liter-pump-pot]',
-			gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
-			gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
-		},
-		icedTea: {
-			pretty: 'Iced Tea',
-			pp:     'addon-' + productId + '-iced-tea[2-1-liter-pump-pot]',
-			gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
-			gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
-		},
-		hotWater: 'addon-' + productId + '-hot-water[gallons]',
-		notes:    'addon-' + productId + '-details[order-notes]'
-	};
+	CoffeeCalculator.prototype.calc = function(form){
+		var self = this;
+		var $form = $(form);
 
-	/*
-	 * Recalculate on change events
-	 */
-
-	$('.beverage-calculator form').on('change', function(event){
-		try{
-			calculateOrder.call(this);
-		}catch(e){
-			console.error(e);
-		}
-	}).on('submit', function(){
-		$('.debug-output').show();
-		return false;
-	});
-
-	// The magic
-	function calculateOrder(){
-		var $form = $(this);
+		self.values = {};
+		self.order = {};
 
 		/*
 		 * Extract the values from the table for easy access later.
 		 */
-		var values = {};
 		$.each($form.serializeArray(), function(i, field) {
-			values[field.name] = field.value;
+			self.values[field.name] = field.value;
 		});
 
 		/*
 		 * For each beverage selected in the form, calculate the number of 
 		 * individuals that will be consuming it.
 		 */
-		var order = {};
-		for(var beverage in consumptionRatios){
-			if(values.hasOwnProperty(beverage)){
+		for(var beverage in self.consumptionRatios){
+			if(self.values.hasOwnProperty(beverage)){
 
 				// The structure of the beverage order:
-				order[beverage] = {
+				self.order[beverage] = {
 					oz: 0, // Number of ounces required
 					containers: {
 						// pp: 0,     // 2.5 Liter (88 oz.) Pump Pot
@@ -157,102 +150,115 @@ jQuery(function($){
 				};
 
 				// This gets the ratio from the consumptionRatios object above
-				var ratio = consumptionRatios[beverage][values.time][values.genderRatio]
+				var ratio = self.consumptionRatios[beverage][self.values.time][self.values.genderRatio]
 
 				// Determine how many individuals will be drinking the given beverage
-				var numberOfDrinkers = Math.ceil(values.guests * ratio);
+				var numberOfDrinkers = Math.ceil(self.values.guests * ratio);
 
 				// Compute the total ounces required of the beverage
-				order[beverage].oz = Math.ceil(numberOfDrinkers * values.cupSize);
+				self.order[beverage].oz = Math.ceil(numberOfDrinkers * self.values.cupSize);
 
-				if(order[beverage].oz <= 88){
-					order[beverage].containers.pp = 1;
-					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
-				}else if(order[beverage].oz <= 176){
-					order[beverage].containers.pp = 2;
-					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
-				}else if(order[beverage].oz <= 264){
-					order[beverage].containers.pp = 2;
-					order[beverage].overage = 88 * order[beverage].containers.pp - order[beverage].oz;
-				}else if (order[beverage].oz <= 320){
-					order[beverage].containers.gal320 = 1;
-					order[beverage].overage = 320 * order[beverage].containers.gal320 - order[beverage].oz;
+				if(self.order[beverage].oz <= 88){
+					self.order[beverage].containers.pp = 1;
+					self.order[beverage].overage = 88 * self.order[beverage].containers.pp - self.order[beverage].oz;
+				}else if(self.order[beverage].oz <= 176){
+					self.order[beverage].containers.pp = 2;
+					self.order[beverage].overage = 88 * self.order[beverage].containers.pp - self.order[beverage].oz;
+				}else if(self.order[beverage].oz <= 264){
+					self.order[beverage].containers.pp = 3;
+					self.order[beverage].overage = 88 * self.order[beverage].containers.pp - self.order[beverage].oz;
+				}else if (self.order[beverage].oz <= 320){
+					self.order[beverage].containers.gal320 = 1;
+					self.order[beverage].overage = 320 * self.order[beverage].containers.gal320 - self.order[beverage].oz;
 				}else{
-					order[beverage].containers.gal640 = gallonReducer(order[beverage].oz, 640);
-					order[beverage].overage = 640 * order[beverage].containers.gal640 - order[beverage].oz;
+					self.order[beverage].containers.gal640 = Math.ceil(self.order[beverage].oz / 640);
+					self.order[beverage].overage = 640 * self.order[beverage].containers.gal640 - self.order[beverage].oz;
 				}
-
 			}
 		}
+	} // End of calc prototype
 
-		/*
-		 * Build WooCommerce-ready order object
-		 */
+
+	/*
+	 * Build WooCommerce-ready order object
+	 */
+	CoffeeCalculator.prototype.getWooOrder = function(){
+		var self = this;
+		if($.isEmptyObject(self.order))
+			return null;
+
 		var orderObject = {
-			'add-to-cart': formFields['product_id'],
-			quantity:      formFields['quantity']
+			'add-to-cart': self.formFields['product_id'],
+			quantity:      self.formFields['quantity']
 		}
-		for(var beverage in order){
-			for(var size in order[beverage].containers){
-				orderObject[formFields[beverage][size]] = order[beverage]['containers'][size];
+		for(var beverage in self.order){
+			for(var size in self.order[beverage].containers){
+				orderObject[self.formFields[beverage][size]] = self.order[beverage]['containers'][size];
 			}
 		}
-		orderObject[formFields['hotWater']] = values.water;
-		orderObject[formFields['notes']] = values.notes;
+		orderObject[self.formFields['hotWater']] = self.values.water;
+		orderObject[self.formFields['notes']] = self.values.notes;
 
-		/*
-		 * This is the final coup de grâce, use AJAX to post the product details
-		 * to WP which will pass the product to the cart. On success, redirect
-		 * the user to the cart. 
-		 */
-		if(!window.bevCalcDebug){
-			$.post('/wp-admin/admin-ajax.php', orderObject)
+		return orderObject;
+	}
+
+	/*
+	 * Display Order
+	 */
+	CoffeeCalculator.prototype.showOrder = function(){
+		var self = this;
+		var output = '';
+		for(var beverage in self.order){
+			output += '<strong>' + self.formFields[beverage].pretty + '</strong>';
+			output += '<dl>';
+			output += '<dt>Recommended Ounces</dt>';
+			output += '<dd>' + self.order[beverage].oz + '</dd>';
+			if(self.order[beverage].containers.pp){
+				var count = self.order[beverage].containers.pp;
+				var cost  = window.containerPricing[beverage].pp * count;
+				output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
+				output += '<dd>$' + cost + '</dd>';
+			}else if(self.order[beverage].containers.gal320){
+				var count = self.order[beverage].containers.gal320;
+				var cost  = window.containerPricing[beverage].gal320 * count;
+				output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
+				output += '<dd>$' + cost + '</dd>';
+			}else{
+				var count = self.order[beverage].containers.gal640;
+				var cost  = window.containerPricing[beverage].gal640 * count;
+				output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
+				output += '<dd>$' + cost + '</dd>';
+			}
+			// output += '<dt>Overage</dt>';
+			// output += '<dd>' + order[beverage].overage + '</dd>';
+			output += '</dl><hr>';
+		}
+		$('.calc-output').html(output);
+	}
+
+	CoffeeCalculator.prototype.submitOrder = function(){
+		var self = this;
+		var wooOrder = self.getWooOrder();
+		if(wooOrder){
+			$.post('/wp-admin/admin-ajax.php', wooOrder)
 				.done(function(data){
 					location.href = '/cart/';
 				});
-		}else{
-			/*
-			 * If debug global is true then just display the order that _would_ be placed
-			 */
-			var output = '';
-			for(var beverage in order){
-				output += '<strong>' + formFields[beverage].pretty + '</strong>';
-				output += '<dl>';
-				output += '<dt>Ounces Computed</dt>';
-				output += '<dd>' + order[beverage].oz + '</dd>';
-				if(order[beverage].containers.pp){
-					var count = order[beverage].containers.pp;
-					var cost  = window.containerPricing[beverage].pp * count;
-					output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
-					output += '<dd>$' + cost + '</dd>';
-				}else if(order[beverage].containers.gal320){
-					var count = order[beverage].containers.gal320;
-					var cost  = window.containerPricing[beverage].gal320 * count;
-					output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
-					output += '<dd>$' + cost + '</dd>';
-				}else{
-					var count = order[beverage].containers.gal640;
-					var cost  = window.containerPricing[beverage].gal640 * count;
-					output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
-					output += '<dd>$' + cost + '</dd>';
-				}
-				// output += '<dt>Overage</dt>';
-				// output += '<dd>' + order[beverage].overage + '</dd>';
-				output += '</dl><hr>';
-			}
-			$('.debug-output').html(output /*+ '<pre />'*/);
-			// $('.debug-output pre').text(
-			// 	JSON.stringify(orderObject, null, 2) + '\n\n' +
-			// 	$.param(orderObject)
-			// );
 		}
 	}
 
-	function gallonReducer(amount, size){
-		if(amount <= size){
-			return 1;
-		}else{
-			return 1 + gallonReducer(amount - size);
-		}
-	}
-});
+	$(function(){
+
+		var coffeeCalculator = new CoffeeCalculator();;
+
+		$('.beverage-calculator form').on('change', function(event){
+			coffeeCalculator.calc(this)
+			coffeeCalculator.showOrder();
+		}).on('submit', function(){
+			$('.right-half').show();
+			return false;
+		});
+
+	})
+
+})(jQuery);
