@@ -31,7 +31,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 add_action( 'plugins_loaded', array( 'DCC_CoffeeCalculator', 'get_instance' ) );
 
 class DCC_CoffeeCalculator {
+
+	private static $product_id = 1398; // WooCommerce Product ID
 	private static $instance = null;
+
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) )
 			self::$instance = new self;
@@ -44,7 +47,25 @@ class DCC_CoffeeCalculator {
 	}
 
 	public function display_calculator( $atts ) {
-		ob_start();
+
+		// Get pricing from WooCommerce product, format for easy input into JS on page
+		$product_meta = get_post_meta(self::$product_id, '_product_addons');
+		$container_pricing = array();
+		foreach ($product_meta[0] as $key => $addon) {
+			if(!in_array($addon['name'], 
+				array('Regular Coffee', 'Decaf Coffee', 'Hot Tea', 'Iced Tea'))){
+					continue;
+				}
+			$camelCaseName = lcfirst(str_replace(" ", "", ucwords(trim($addon['name']))));
+			$container_pricing[$camelCaseName] = array(
+				'pp'     => $addon['options'][0]['price'],
+				'gal320' => $addon['options'][1]['price'],
+				'gal640' => $addon['options'][2]['price'],
+			);
+		}
+
+		echo '<script>var containerPricing = ' . json_encode($container_pricing) . '</script>';
+
 		if(isset($_GET['debug']) && filter_input(INPUT_GET, 'debug') == 1){
 			echo "<script>window.bevCalcDebug = true;</script>";
 			echo "<div class='debug-output'><pre>Debug output will appear here.\nComplete the form to the right and click\nthe calculate button to view the order.</pre></div>";

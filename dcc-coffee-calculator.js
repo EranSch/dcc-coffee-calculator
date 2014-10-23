@@ -210,17 +210,23 @@ jQuery(function($){
 				output += '<dt>Ounces Computed</dt>';
 				output += '<dd>' + order[beverage].oz + '</dd>';
 				if(order[beverage].containers.pp){
-					output += '<dt>2.5 Liter (88 oz.) Pump Pot</dt>';
-					output += '<dd>' + order[beverage].containers.pp + '</dd>';
+					var count = order[beverage].containers.pp;
+					var cost  = window.containerPricing[beverage].pp * count;
+					output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
+					output += '<dd>$' + cost + '</dd>';
 				}else if(order[beverage].containers.gal320){
-					output += '<dt>2.5 Gallon (320 oz.) Cambro</dt>';
-					output += '<dd>' + order[beverage].containers.gal320 + '</dd>';
+					var count = order[beverage].containers.gal320;
+					var cost  = window.containerPricing[beverage].gal320 * count;
+					output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
+					output += '<dd>$' + cost + '</dd>';
 				}else{
-					output += '<dt>5 Gallon (640 oz.) Cambro</dt>';
-					output += '<dd>' + order[beverage].containers.gal640 + '</dd>';
+					var count = order[beverage].containers.gal640;
+					var cost  = window.containerPricing[beverage].gal640 * count;
+					output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
+					output += '<dd>$' + cost + '</dd>';
 				}
-				output += '<dt>Overage</dt>';
-				output += '<dd>' + order[beverage].overage + '</dd>';
+				// output += '<dt>Overage</dt>';
+				// output += '<dd>' + order[beverage].overage + '</dd>';
 				output += '</dl><hr>';
 			}
 			$('.debug-output').html(output /*+ '<pre />'*/);
