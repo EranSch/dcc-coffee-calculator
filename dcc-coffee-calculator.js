@@ -206,33 +206,59 @@
 	 * Display Order
 	 */
 	CoffeeCalculator.prototype.showOrder = function(){
+
 		var self = this;
 		var output = '';
+		var total = 0;
+
 		for(var beverage in self.order){
 			output += '<strong>' + self.formFields[beverage].pretty + '</strong>';
+			output += '<p>Recommended Amount: ' + self.order[beverage].oz + 'oz.</p>';
 			output += '<dl>';
-			output += '<dt>Recommended Ounces</dt>';
-			output += '<dd>' + self.order[beverage].oz + '</dd>';
 			if(self.order[beverage].containers.pp){
 				var count = self.order[beverage].containers.pp;
 				var cost  = window.containerPricing[beverage].pp * count;
+				total += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
-				output += '<dd>$' + cost + '</dd>';
+				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else if(self.order[beverage].containers.gal320){
 				var count = self.order[beverage].containers.gal320;
 				var cost  = window.containerPricing[beverage].gal320 * count;
+				total += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
-				output += '<dd>$' + cost + '</dd>';
+				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else{
 				var count = self.order[beverage].containers.gal640;
 				var cost  = window.containerPricing[beverage].gal640 * count;
+				total += cost;
 				output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
-				output += '<dd>$' + cost + '</dd>';
+				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}
 			// output += '<dt>Overage</dt>';
 			// output += '<dd>' + order[beverage].overage + '</dd>';
-			output += '</dl><hr>';
+			output += '</dl>';
 		}
+
+		if(self.values.water){
+			total += 6.99;;
+			output += '<strong>Hot Water</strong>';
+			output += '<dl>';
+			output += '<dt>(' + self.values.water + ') Gallon(s)</dt>';
+			output += '<dd>$6.99</dd>';
+			output += '</dl>';
+		}
+
+		total += 50;
+		output += '<dl>';
+		output += '<dt><strong>Refundable Deposit</strong></dt>';
+		output += '<dd>$50.00</dd>';
+		output += '</dl>';
+
+		output += '<dl>';
+		output += '<dt><strong>Total</strong></dt>';
+		output += '<dd>$' + total.toFixed(2) + '</dd>';
+		output += '</dl>';
+
 		$('.calc-output').html(output);
 	}
 
@@ -248,17 +274,18 @@
 	}
 
 	$(function(){
-
 		var coffeeCalculator = new CoffeeCalculator();;
-
-		$('.beverage-calculator form').on('change', function(event){
-			coffeeCalculator.calc(this)
-			coffeeCalculator.showOrder();
-		}).on('submit', function(){
-			$('.right-half').show();
-			return false;
+		$('.beverage-calculator form')
+			.on('change', function(event){
+				coffeeCalculator.calc(this)
+				coffeeCalculator.showOrder();})
+			.on('submit', function(){
+				$('.right-half').show();
+				return false;
+			});
+		$('.add-to-cart').on('click', function(){
+			coffeeCalculator.submitOrder.call(coffeeCalculator);
 		});
-
 	})
 
 })(jQuery);
