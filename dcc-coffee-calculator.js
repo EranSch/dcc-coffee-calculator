@@ -176,13 +176,11 @@
 				}
 			}
 		}
-	} // End of calc prototype
+	}
 
 
-	/*
-	 * Build WooCommerce-ready order object
-	 */
 	CoffeeCalculator.prototype.getWooOrder = function(){
+
 		var self = this;
 		if($.isEmptyObject(self.order))
 			return null;
@@ -202,9 +200,7 @@
 		return orderObject;
 	}
 
-	/*
-	 * Display Order
-	 */
+
 	CoffeeCalculator.prototype.showOrder = function(){
 
 		var self = this;
@@ -262,6 +258,7 @@
 		$('.calc-output').html(output);
 	}
 
+
 	CoffeeCalculator.prototype.submitOrder = function(){
 		var self = this;
 		var wooOrder = self.getWooOrder();
@@ -272,6 +269,7 @@
 				});
 		}
 	}
+
 
 	$(function(){
 		var coffeeCalculator = new CoffeeCalculator();;
