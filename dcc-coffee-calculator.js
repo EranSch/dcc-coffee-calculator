@@ -214,12 +214,14 @@
 		}
 		orderObject[self.formFields['hotWater']] = self.values.water;
 
+		orderObject[self.formFields['notes']] = '';
+
 		if(self.values.addons.length > 0){
 			var str = 'Addons Requested: ' + self.values.addons;
 			orderObject[self.formFields['notes']] = str + '\n\n';
 		}
 
-		orderObject[self.formFields['notes']] += self.values.notes;
+		orderObject[self.formFields['notes']] += self.values.notes || '';
 
 		return orderObject;
 	}
@@ -266,7 +268,7 @@
 		}
 
 		if(self.values.water){
-			totalCost += 6.99;;
+			totalCost += 6.99;
 			output += '<strong>Hot Water</strong>';
 			output += '<dl>';
 			output += '<dt>(' + self.values.water + ') Gallon(s)</dt>';
@@ -314,7 +316,7 @@
 
 
 	$(function(){
-		var coffeeCalculator = new CoffeeCalculator();;
+		var coffeeCalculator = new CoffeeCalculator();
 		$('.beverage-calculator form')
 			.on('change', function(event){
 				coffeeCalculator.calc(this)
