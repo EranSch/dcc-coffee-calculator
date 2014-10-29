@@ -3,6 +3,15 @@
 	max-width: 337px;
 	width: 50%;
 }
+
+@media screen and (max-width: 678px){
+	.beverage-calculator{
+		float: none;
+		width: 100%;
+		max-width: none;
+	}
+}
+
 .beverage-calculator label{
 	display:block;
 	margin: 1em 0;
@@ -42,7 +51,18 @@
 	font-size: 0.9em;
 	color: grey;
 	padding: 0px 2px;
+	max-width: 338px;
 }
+
+@media screen and (max-width: 678px){
+	.slider {
+		margin: 0 auto !important;
+	}
+	.range-label {
+		margin: 0 auto;
+	}
+}
+
 .water input {
 	margin-top: -15px;
 }
@@ -58,6 +78,23 @@
 	width: 50%;
 	padding-left:25px;
 	float: right;
+}
+
+@media screen and (max-width: 678px){
+	.right-half{
+		clear: both;
+		float: none;
+		width: 100%;
+		padding-left: 0;
+	}
+}
+
+.calc-output {
+	position: relative;
+	transition: 500ms all ease-in;
+}
+.calc-output.alert-visible * {
+	opacity: 0.1;
 }
 .calc-output strong {
 	font-size: 23px
