@@ -88,28 +88,28 @@
 				pp:     'addon-' + productId + '-regular-coffee[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]',
-				gallon: 'addon-' + productId + '-regular-coffee[gallons-if-using-cambros]'
+				gallon: 'addon-' + productId + '-regular-coffee[amount-half-gallons]'
 			},
 			decafCoffee: {
 				pretty: 'Decaf Coffee',
 				pp:     'addon-' + productId + '-decaf-coffee[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]',
-				gallon: 'addon-' + productId + '-decaf-coffee[gallons-if-using-cambros]'
+				gallon: 'addon-' + productId + '-decaf-coffee[amount-half-gallons]'
 			},
 			hotTea: {
 				pretty: 'Hot Tea',
 				pp:     'addon-' + productId + '-hot-tea[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]',
-				gallon: 'addon-' + productId + '-hot-tea[gallons-if-using-cambros]'
+				gallon: 'addon-' + productId + '-hot-tea[amount-half-gallons]'
 			},
 			icedTea: {
 				pretty: 'Iced Tea',
 				pp:     'addon-' + productId + '-iced-tea[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
 				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]',
-				gallon: 'addon-' + productId + '-iced-tea[gallons-if-using-cambros]'
+				gallon: 'addon-' + productId + '-iced-tea[amount-half-gallons]'
 			},
 			hotWater: 'addon-' + productId + '-hot-water[gallons]',
 			notes:    'addon-' + productId + '-details[order-notes]'
@@ -117,8 +117,9 @@
 
 		// Convert Oz to Gal and round to next .5 increment
 		this._convertOunceToGal = function(oz){
-			var gal = oz * 0.0078125;
-			return 0.5 * Math.ceil(gal/0.5)
+			var gallons = oz * 0.0078125;                      // Convert to gallons
+			var roundedGallons = 0.5 * Math.ceil(gallons/0.5); // Round to up to nearest .5
+			return roundedGallons * 2;                         // Return in half gallons
 		}
 
 	}
@@ -234,12 +235,12 @@
 		for(var beverage in self.order){
 			output += '<strong>' + self.formFields[beverage].pretty + '</strong>';
 			if(!self.order[beverage].containers.pp){
-				var gallons = self._convertOunceToGal(self.order[beverage].oz);
-				totalVol += gallons;
-				output += '<p>Recommended Amount: ' + gallons + ' gal</p>';
+				var halfGallons = self._convertOunceToGal(self.order[beverage].oz);
+				totalVol += halfGallons;
+				output += '<p>Recommended Amount: ' + (halfGallons / 2) + ' gal</p>';
 			}
 			output += '<dl>';
-			var gallons = self._convertOunceToGal(self.order[beverage].oz);
+			var halfGallons = self._convertOunceToGal(self.order[beverage].oz);
 			if(self.order[beverage].containers.pp){
 				var count = self.order[beverage].containers.pp;
 				var cost  = window.containerPricing[beverage].pp * count;
@@ -248,13 +249,13 @@
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else if(self.order[beverage].containers.gal320){
 				var count = self.order[beverage].containers.gal320;
-				var cost  = window.containerPricing[beverage].gallon * gallons;
+				var cost  = window.containerPricing[beverage].gallon * halfGallons;
 				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else{
 				var count = self.order[beverage].containers.gal640;
-				var cost  = window.containerPricing[beverage].gallon * gallons;
+				var cost  = window.containerPricing[beverage].gallon * halfGallons;
 				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
@@ -284,7 +285,7 @@
 		output += '<dd>$' + totalCost.toFixed(2) + '</dd>';
 		output += '</dl>';
 
-		if(totalVol > 20){
+		if(totalVol > 40){
 			// Order exceeded maximum allowed volume
 			$('.calc-output').html(output);
 			$('.calc-output').addClass('alert-visible');
