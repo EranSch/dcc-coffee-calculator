@@ -65,13 +65,10 @@ class DCC_CoffeeCalculator {
 			);
 		}
 
-		echo '<script>var containerPricing = ' . json_encode($container_pricing) . '</script>';
-
-		if(isset($_GET['debug']) && filter_input(INPUT_GET, 'debug') == 1){
-			echo "<script>window.bevCalcDebug = true;</script>";
-		}
-		echo file_get_contents(plugins_url( 'templates/calculator.html', __FILE__ ));
-		echo file_get_contents(plugins_url( 'templates/right-half.html', __FILE__ ));
+		ob_start();
+			echo '<script>var containerPricing = ' . json_encode($container_pricing) . '</script>';
+			echo file_get_contents(plugins_url( 'templates/calculator.html', __FILE__ ));
+			echo file_get_contents(plugins_url( 'templates/right-half.html', __FILE__ ));
 		return ob_get_clean();
 	}
 
