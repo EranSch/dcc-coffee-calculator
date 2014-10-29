@@ -61,6 +61,7 @@ class DCC_CoffeeCalculator {
 				'pp'     => $addon['options'][0]['price'],
 				'gal320' => $addon['options'][1]['price'],
 				'gal640' => $addon['options'][2]['price'],
+				'gallon' => $addon['options'][3]['price'],
 			);
 		}
 

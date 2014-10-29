@@ -73,6 +73,12 @@
 	width: 100%;
 }
 
+.right-half .add-to-cart[disabled] {
+	background-color: rgb(210, 210, 210);
+	cursor: not-allowed;
+	border-color: rgb(182, 182, 182);
+}
+
 .right-half {
 	display: none;
 	width: 50%;
@@ -115,4 +121,16 @@
 	line-height: 1;
 	padding-top: 10px;
 	display: block;
+}
+.order-alert {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 0;
+	opacity: 1 !important;
+	color: red;
+	font-size: 2em;
+	text-align: center;
+	transition: 250ms all ease-in;
+	font-weight: bold;
 }

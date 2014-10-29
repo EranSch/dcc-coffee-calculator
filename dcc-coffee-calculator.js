@@ -91,29 +91,39 @@
 				pretty: 'Regular Coffee',
 				pp:     'addon-' + productId + '-regular-coffee[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]'
+				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]',
+				gallon: 'addon-' + productId + '-regular-coffee[gallons-if-using-cambros]'
 			},
 			decafCoffee: {
 				pretty: 'Decaf Coffee',
 				pp:     'addon-' + productId + '-decaf-coffee[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]'
+				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]',
+				gallon: 'addon-' + productId + '-decaf-coffee[gallons-if-using-cambros]'
 			},
 			hotTea: {
 				pretty: 'Hot Tea',
 				pp:     'addon-' + productId + '-hot-tea[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]'
+				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]',
+				gallon: 'addon-' + productId + '-hot-tea[gallons-if-using-cambros]'
 			},
 			icedTea: {
 				pretty: 'Iced Tea',
 				pp:     'addon-' + productId + '-iced-tea[2-5-liter-pump-pot]',
 				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]'
+				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]',
+				gallon: 'addon-' + productId + '-iced-tea[gallons-if-using-cambros]'
 			},
 			hotWater: 'addon-' + productId + '-hot-water[gallons]',
 			notes:    'addon-' + productId + '-details[order-notes]'
 		};
+
+		// Convert Oz to Gal and round to next .5 increment
+		this._convertOunceToGal = function(oz){
+			var gal = oz * 0.0078125;
+			return 0.5 * Math.ceil(gal/0.5)
+		}
 
 	}
 
@@ -123,6 +133,7 @@
 
 		self.values = {};
 		self.order = {};
+		var totalOz = 0;
 
 		/*
 		 * Extract the values from the table for easy access later.
@@ -198,6 +209,10 @@
 		for(var beverage in self.order){
 			for(var size in self.order[beverage].containers){
 				orderObject[self.formFields[beverage][size]] = self.order[beverage]['containers'][size];
+				if(self.order[beverage]['containers'][size] && self.order[beverage]['containers'][size] != 'pp'){
+					// If the container size is something either than Pump Pots, also store the volume required
+					orderObject[self.formFields[beverage]['gallon']] = self._convertOunceToGal(self.order[beverage].oz);
+				}
 			}
 		}
 		orderObject[self.formFields['hotWater']] = self.values.water;
@@ -217,28 +232,34 @@
 
 		var self = this;
 		var output = '';
-		var total = 0;
+		var totalCost = 0;
+		var totalVol = 0;
 
 		for(var beverage in self.order){
 			output += '<strong>' + self.formFields[beverage].pretty + '</strong>';
-			output += '<p>Recommended Amount: ' + self.order[beverage].oz + 'oz.</p>';
+			if(!self.order[beverage].containers.pp){
+				var gallons = self._convertOunceToGal(self.order[beverage].oz);
+				totalVol += gallons;
+				output += '<p>Recommended Amount: ' + gallons + ' gal</p>';
+			}
 			output += '<dl>';
+			var gallons = self._convertOunceToGal(self.order[beverage].oz);
 			if(self.order[beverage].containers.pp){
 				var count = self.order[beverage].containers.pp;
 				var cost  = window.containerPricing[beverage].pp * count;
-				total += cost;
+				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else if(self.order[beverage].containers.gal320){
 				var count = self.order[beverage].containers.gal320;
-				var cost  = window.containerPricing[beverage].gal320 * count;
-				total += cost;
+				var cost  = window.containerPricing[beverage].gallon * gallons;
+				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else{
 				var count = self.order[beverage].containers.gal640;
-				var cost  = window.containerPricing[beverage].gal640 * count;
-				total += cost;
+				var cost  = window.containerPricing[beverage].gallon * gallons;
+				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}
@@ -248,7 +269,7 @@
 		}
 
 		if(self.values.water){
-			total += 6.99;;
+			totalCost += 6.99;;
 			output += '<strong>Hot Water</strong>';
 			output += '<dl>';
 			output += '<dt>(' + self.values.water + ') Gallon(s)</dt>';
@@ -256,7 +277,7 @@
 			output += '</dl>';
 		}
 
-		total += 50;
+		totalCost += 50;
 		output += '<dl>';
 		output += '<dt><strong>Refundable Deposit</strong></dt>';
 		output += '<dd>$50.00</dd>';
@@ -264,10 +285,22 @@
 
 		output += '<dl>';
 		output += '<dt><strong>Total</strong></dt>';
-		output += '<dd>$' + total.toFixed(2) + '</dd>';
+		output += '<dd>$' + totalCost.toFixed(2) + '</dd>';
 		output += '</dl>';
 
-		$('.calc-output').html(output);
+		if(totalVol > 20){
+			// Order exceeded maximum allowed volume
+			$('.calc-output').html(output);
+			$('.calc-output').addClass('alert-visible');
+			$('.add-to-cart').prop('disabled', true);
+			$('<div class="order-alert"/>')
+				.text('This order exceeds the maximum volume we can offer at one time.')
+				.appendTo($('.calc-output'));
+		}else{
+			$('.calc-output').removeClass('alert-visible');
+			$('.add-to-cart').prop('disabled', false);
+			$('.calc-output').html(output);
+		}
 	}
 
 
