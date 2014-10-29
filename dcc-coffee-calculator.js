@@ -7,15 +7,11 @@
  *
  * This calculator takes a variety of inputs from the user and determines a
  * configuration of beverage containers for them to rent. This logic is tightly
- * couple with and entirely dependent on both WooCommerce and WordPress. So 
- * tightly, in fact, that it requires a product exist in WooCommerce with the 
- * ID of */ var productId = 1398; /* so if someone changes the product up, that
- * might be why. 
+ * coupled with and entirely dependent on both WooCommerce and WordPress. So
+ * tightly, in fact, that it requires a product exist in WooCommerce with the
+ * ID of */ var productId = 1398; /* so if someone changes the product up, and
+ * everything breaks, this might be why.
  * 
- * The backend PHP and this JS logic both support a debug mode which can be 
- * enabled by appending `?debug=1` to the URL during testing. This will only
- * display the calculated results rather than add them to the card and redirect
- * the user. 
  */
 
 (function($){
