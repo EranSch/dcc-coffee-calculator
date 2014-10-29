@@ -206,7 +206,7 @@
 		for(var beverage in self.order){
 			for(var size in self.order[beverage].containers){
 				orderObject[self.formFields[beverage][size]] = self.order[beverage]['containers'][size];
-				if(self.order[beverage]['containers'][size] && self.order[beverage]['containers'][size] != 'pp'){
+				if(self.order[beverage]['containers'][size] && !self.order[beverage]['containers'].hasOwnProperty('pp')){
 					// If the container size is something either than Pump Pots, also store the volume required
 					orderObject[self.formFields[beverage]['gallon']] = self._convertOunceToGal(self.order[beverage].oz);
 				}
