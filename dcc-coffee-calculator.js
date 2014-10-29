@@ -228,7 +228,7 @@
 	}
 
 
-	CoffeeCalculator.prototype.showOrder = function(){
+	CoffeeCalculator.prototype.updateOrderPreview = function(){
 
 		var self = this;
 		var output = '';
@@ -321,7 +321,8 @@
 		$('.beverage-calculator form')
 			.on('change', function(event){
 				coffeeCalculator.calc(this)
-				coffeeCalculator.showOrder();})
+				coffeeCalculator.updateOrderPreview();
+			})
 			.on('submit', function(){
 				$('.right-half').show();
 				return false;
