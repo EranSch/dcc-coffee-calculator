@@ -30,7 +30,7 @@
 			regularCoffee: {
 				morn: {
 					0: 0.6, // All men
-					50: 0.5, // Mixed
+					50: 0.55, // Mixed
 					100: 0.5, // All women
 				},
 				eve: {
@@ -116,7 +116,7 @@
 			notes:    'addon-' + productId + '-details[order-notes]'
 		};
 
-		// Convert Oz to Gal and round to next .5 increment
+		// Convert Oz to Gal, round to next .5 increment, return amount in half gallons
 		this._convertOunceToGal = function(oz){
 			var gallons = oz * 0.0078125;                      // Convert to gallons
 			var roundedGallons = 0.5 * Math.ceil(gallons/0.5); // Round to up to nearest .5
