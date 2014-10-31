@@ -20,6 +20,7 @@
 
 		this.values = {};
 		this.order = {};
+		this.pricing = window.calcPricing;
 
 		/*
 		 * This object stores the various percentages the group is predicted to 
@@ -245,19 +246,19 @@
 			var halfGallons = self._convertOunceToGal(self.order[beverage].oz);
 			if(self.order[beverage].containers.pp){
 				var count = self.order[beverage].containers.pp;
-				var cost  = window.containerPricing[beverage].pp * count;
+				var cost  = self.pricing.containerPricing[beverage].pp * count;
 				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Liter (88 oz.) Pump Pot</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else if(self.order[beverage].containers.gal320){
 				var count = self.order[beverage].containers.gal320;
-				var cost  = window.containerPricing[beverage].gallon * halfGallons;
+				var cost  = self.pricing.containerPricing[beverage].gallon * halfGallons;
 				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '2.5 Gallon (320 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
 			}else{
 				var count = self.order[beverage].containers.gal640;
-				var cost  = window.containerPricing[beverage].gallon * halfGallons;
+				var cost  = self.pricing.containerPricing[beverage].gallon * halfGallons;
 				totalCost += cost;
 				output += '<dt>' + '(' + count + ') ' + '5 Gallon (640 oz.) Cambro</dt>';
 				output += '<dd>$' + cost.toFixed(2) + '</dd>';
@@ -276,10 +277,11 @@
 			output += '</dl>';
 		}
 
-		totalCost += 50;
+		var deposit = parseInt(self.pricing.deposit)
+		totalCost += deposit;
 		output += '<dl>';
 		output += '<dt><strong>Refundable Deposit</strong></dt>';
-		output += '<dd>$50.00</dd>';
+		output += '<dd>$' + deposit.toFixed(2) + '</dd>';
 		output += '</dl>';
 
 		output += '<dl>';

@@ -65,8 +65,15 @@ class DCC_CoffeeCalculator {
 			);
 		}
 
+		$deposit_amount = get_post_meta(self::$product_id, '_regular_price');
+
+		$pricing = array(
+			'deposit' => $deposit_amount[0],
+			'containerPricing' => $container_pricing
+		);
+
 		ob_start();
-			echo '<script>var containerPricing = ' . json_encode($container_pricing) . '</script>';
+			echo '<script>window.calcPricing = ' . json_encode($pricing) . '</script>';
 			echo file_get_contents(plugins_url( 'templates/calculator.html', __FILE__ ));
 			echo file_get_contents(plugins_url( 'templates/right-half.html', __FILE__ ));
 		return ob_get_clean();
