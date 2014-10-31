@@ -87,29 +87,29 @@
 			regularCoffee: {
 				pretty: 'Regular Coffee',
 				pp:     'addon-' + productId + '-regular-coffee[2-5-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro]',
+				gal320: 'addon-' + productId + '-regular-coffee[2-5-gallon-cambro-container]',
+				gal640: 'addon-' + productId + '-regular-coffee[5-gallon-cambro-container]',
 				gallon: 'addon-' + productId + '-regular-coffee[amount-half-gallons]'
 			},
 			decafCoffee: {
 				pretty: 'Decaf Coffee',
 				pp:     'addon-' + productId + '-decaf-coffee[2-5-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro]',
+				gal320: 'addon-' + productId + '-decaf-coffee[2-5-gallon-cambro-container]',
+				gal640: 'addon-' + productId + '-decaf-coffee[5-gallon-cambro-container]',
 				gallon: 'addon-' + productId + '-decaf-coffee[amount-half-gallons]'
 			},
 			hotTea: {
 				pretty: 'Hot Tea',
 				pp:     'addon-' + productId + '-hot-tea[2-5-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro]',
+				gal320: 'addon-' + productId + '-hot-tea[2-5-gallon-cambro-container]',
+				gal640: 'addon-' + productId + '-hot-tea[5-gallon-cambro-container]',
 				gallon: 'addon-' + productId + '-hot-tea[amount-half-gallons]'
 			},
 			icedTea: {
 				pretty: 'Iced Tea',
 				pp:     'addon-' + productId + '-iced-tea[2-5-liter-pump-pot]',
-				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro]',
-				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro]',
+				gal320: 'addon-' + productId + '-iced-tea[2-5-gallon-cambro-container]',
+				gal640: 'addon-' + productId + '-iced-tea[5-gallon-cambro-container]',
 				gallon: 'addon-' + productId + '-iced-tea[amount-half-gallons]'
 			},
 			hotWater: 'addon-' + productId + '-hot-water[gallons]',
