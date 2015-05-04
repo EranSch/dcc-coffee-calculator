@@ -48,6 +48,9 @@ class DCC_CoffeeCalculator {
 
 	public function display_calculator( $atts ) {
 
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
 		// Get pricing from WooCommerce product, format for easy input into JS on page
 		$product_meta = get_post_meta(self::$product_id, '_product_addons');
 		$container_pricing = array();

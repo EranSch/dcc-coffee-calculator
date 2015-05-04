@@ -12,6 +12,10 @@
 	}
 }
 
+.missing-field {
+	border-color: red !important;
+}
+
 .beverage-calculator label{
 	display:block;
 	margin: 1em 0;
@@ -133,4 +137,29 @@
 	text-align: center;
 	transition: 250ms all ease-in;
 	font-weight: bold;
+}
+
+.pickup-date-time {
+	display: block;
+	height: 120px;
+	background-color: rgb(242, 238, 238);
+	border: 1px solid rgb(219, 219, 219);
+	padding: 1em;
+	border-radius: 2px;
+}
+.pickup-date-time span {
+	font-weight: bold;
+	display: block;
+}
+.pickup-date-time em {
+	display: block;
+	line-height: 1.2;
+	margin-bottom: 0.4em;
+}
+.pickup-date-time input {
+	width: 48%;
+	float: left;
+}
+.pickup-date-time input:first-of-type {
+	margin-right: 0.5em;
 }

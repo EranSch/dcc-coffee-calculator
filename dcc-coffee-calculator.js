@@ -129,6 +129,8 @@
 		var self = this;
 		var $form = $(form);
 
+		self.$form = $form;
+
 		self.values = {};
 		self.order = {};
 		var totalOz = 0;
@@ -215,11 +217,12 @@
 		}
 		orderObject[self.formFields['hotWater']] = self.values.water;
 
-		orderObject[self.formFields['notes']] = '';
+		orderObject[self.formFields['notes']] = 
+		'Requested Pickup: ' + self.values['pickup-date'] + ' ' + self.values['pickup-time'] + '\n';
 
 		if(self.values.addons.length > 0){
 			var str = 'Addons Requested: ' + self.values.addons;
-			orderObject[self.formFields['notes']] = str + '\n\n';
+			orderObject[self.formFields['notes']] += str + '\n\n';
 		}
 
 		orderObject[self.formFields['notes']] += self.values.notes || '';
@@ -237,6 +240,7 @@
 
 		for(var beverage in self.order){
 			output += '<strong>' + self.formFields[beverage].pretty + '</strong>';
+			// output += '<p>Calculated Amount: ' + self.order[beverage].oz + ' oz</p>';
 			if(!self.order[beverage].containers.pp){
 				var halfGallons = self._convertOunceToGal(self.order[beverage].oz);
 				totalVol += halfGallons;
@@ -316,16 +320,33 @@
 		}
 	}
 
+	CoffeeCalculator.prototype.isComplete = function(form){
+		var flag = true;
+		$(form).find('[required]').each(function() {
+			var $this = $(this);
+			if(!$this.val()) {
+				flag = false;
+				$this.addClass('missing-field');
+			}
+		});
+		return flag;
+	}
+
 
 	$(function(){
 		var coffeeCalculator = new CoffeeCalculator();
+		$('.js-datepicker').datepicker();
 		$('.beverage-calculator form')
 			.on('change', function(event){
 				coffeeCalculator.calc(this)
 				coffeeCalculator.updateOrderPreview();
 			})
 			.on('submit', function(){
-				$('.right-half').show();
+				if(coffeeCalculator.isComplete(this)){
+					$('.right-half').show();
+				}else{
+					alert('You must complete all required fields.');
+				}
 				return false;
 			});
 		$('.add-to-cart').on('click', function(){
